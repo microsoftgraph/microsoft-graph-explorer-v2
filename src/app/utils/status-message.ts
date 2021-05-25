@@ -20,7 +20,8 @@ export function convertArrayToObject(array: any[]): object {
 };
 
 export function extractUrl(value: string): string[] | null {
-  return value.toString().match(/\bhttps?:\/\/\S+/gi);
+  value += '';
+  return value.match(/\bhttps?:\/\/\S+/gi);
 }
 
 export function matchIncludesLink(matches: RegExpMatchArray, part: string) {
@@ -31,7 +32,7 @@ export function matchIncludesLink(matches: RegExpMatchArray, part: string) {
 }
 
 export function getMatchesAndParts(message: string) {
-  message = message.toString();
+  message += '';
   const numberPattern = /([$0-9]+)/g;
   const matches: RegExpMatchArray | null = message.match(numberPattern);
   const parts: string[] = message.split(numberPattern);

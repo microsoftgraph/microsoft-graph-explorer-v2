@@ -2,10 +2,10 @@ module.exports = {
   collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
   resolver: "jest-pnp-resolver",
   setupFiles: ["react-app-polyfill/jsdom"],
-  setupTestFrameworkScriptFile: "<rootDir>/src/setupTests.ts",
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
   testMatch: [
-    "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-    "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec).[jt]s?(x)"
   ],
   globals: {
     crypto: require("crypto")
@@ -13,18 +13,21 @@ module.exports = {
   testEnvironment: "jsdom",
   testURL: "http://localhost",
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+    "^.+\\.(js|jsx|ts|tsx)$": "ts-jest",
     "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
     "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)":
-      "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "ts-jest"
   },
   transformIgnorePatterns: [
     "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-    "^.+\\.module\\.(css|sass|scss)$"
+    "^.+\\.module\\.(css|sass|scss)$",
+    "node_modules"
   ],
   moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "^react-native$": "react-native-web",
-    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+    "office-ui-fabric-react/lib/(.*)$": "office-ui-fabric-react/lib-commonjs/$1",
   },
   moduleFileExtensions: [
     "web.js",
