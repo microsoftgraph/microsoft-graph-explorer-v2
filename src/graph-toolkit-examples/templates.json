@@ -1,7 +1,7 @@
 {
-    "/me": "https://mgt.dev/iframe.html?id=components-mgt-person-card--person-card-hover&source=ge",
+    "/me": "https://mgt.dev/iframe.html?id=components-mgt-person-card--person-card&source=ge",
     "/me/people": "https://mgt.dev/iframe.html?id=components-mgt-people--people&source=ge",
     "/me/planner/tasks": "https://mgt.dev/iframe.html?id=components-mgt-tasks--tasks&source=ge",
-    "/me/calendarview\\?startdatetime=([^/?]+)&enddatetime=([^/?]+)": "https://mgt.dev/iframe.html?id=components-mgt-agenda--get-events-for-next-week&source=ge",
-    "/me/photo/\\$value": "https://mgt.dev/iframe.html?id=components-mgt-person--person-photo-only&source=ge"
+    "/me/calendarview\\?startdatetime=([^/?]+)&enddatetime=([^/?]+)": "https://mgt.dev/iframe.html?id=components-mgt-agenda-properties--get-events-for-next-week&source=ge",
+    "/me/photo/\\$value": "https://mgt.dev/iframe.html?id=components-mgt-person-properties--person-photo-only&source=ge"
 }
