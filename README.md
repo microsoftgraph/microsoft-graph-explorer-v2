@@ -14,13 +14,12 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 * `npm start` starts the TypeScript compiler in watch mode and the local server. It should open your browser automatically with the Graph Explorer at [http://localhost:3000/](http://localhost:3000).
 
 #### Enabling authentication with your own credentials
-* Signing to your Microsoft account or Create one if you don't have.
-* In the Dashboard, click `Add an app in the Azure portal`. You will be redirected to the Microsoft Azure portal where you Register an application.
-    Set Redirect URI to `http://localhost:3000`.You can also set it from authentication tab in the app you have just created.
-* Create a `.env` file at the root of the project and add the following keys.
+* Sign in to your Microsoft account (or Create one) at the [Microsoft Azure Portal](https://ms.portal.azure.com/).
+* Find the Azure service named App registrations. If you haven't used this service before, you might need to search for it in the search bar. 
+* In the App registrations page, click `+ New registration`. You will be redirected to a form in the Microsoft Azure portal where you Register an application. Fill out the form and set the Redirect URI to a `Single-page application (SPA)` with `http://localhost:3000`. You can also set it from authentication tab in the app you have just created.
+* Create a `.env` file at the root of the project/repo and add the following keys.
     - REACT_APP_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
     - REACT_APP_INSTRUMENTATION_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-
 Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure portal and `REACT_APP_INSTRUMENTATION_KEY` is the `Object ID` from the portal.
 
 ## Other commands
