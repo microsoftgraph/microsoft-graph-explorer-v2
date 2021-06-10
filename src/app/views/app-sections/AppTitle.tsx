@@ -1,7 +1,6 @@
 import { getId, IconButton, IStackTokens, Label, Stack, TooltipHost } from 'office-ui-fabric-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { getVersion } from '../../utils/version';
 
 export function appTitleDisplayOnFullScreen(
   classes: any,
@@ -60,7 +59,6 @@ function displayGraphLabel(classes: any): React.ReactNode {
   return (
     <Label className={classes.graphExplorerLabel}>
       Graph Explorer
-      <span className={classes.versionLabel}>{`v${getVersion()}`}</span>
     </Label>
   )
 }
