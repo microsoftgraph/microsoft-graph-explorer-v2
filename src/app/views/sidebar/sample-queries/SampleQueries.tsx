@@ -230,7 +230,7 @@ export class SampleQueries extends Component<ISampleQueriesProps, any> {
     let selectionDisabled = false;
     const customStyles: Partial<IDetailsRowStyles> = {};
     if (this.state.selectedQuery === props.item.id) {
-      customStyles.root = { backgroundColor: '#C0C0C0' };
+      customStyles.root = { backgroundColor: '#8D8D8D' };
     }
 
     if (props) {
