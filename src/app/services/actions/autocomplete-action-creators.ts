@@ -1,10 +1,6 @@
 import { suggestions } from '../../../modules/suggestions';
 import { IAction } from '../../../types/action';
-import {
-  AUTOCOMPLETE_FETCH_ERROR,
-  AUTOCOMPLETE_FETCH_PENDING,
-  AUTOCOMPLETE_FETCH_SUCCESS,
-} from '../redux-constants';
+import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
 
 export function fetchAutocompleteSuccess(response: object): IAction {
   return {

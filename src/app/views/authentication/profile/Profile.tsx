@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../../../appLocale';
+import { globalCloud, replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { Mode } from '../../../../types/enums';
 import { IProfileProps, IProfileState } from '../../../../types/profile';
 import { IRootState } from '../../../../types/root';
@@ -27,12 +28,12 @@ export class Profile extends Component<IProfileProps, IProfileState> {
   }
 
   public componentDidMount = async () => {
-    const { actions } = this.props;
-
+    const { actions, cloud } = this.props;
+    const shouldReplaceBaseUrl = cloud.loginUrl !== globalCloud.loginUrl;
     const jsonUserInfo = actions
       ? await actions.getProfileInfo({
         selectedVerb: 'GET',
-        sampleUrl: USER_INFO_URL
+        sampleUrl: shouldReplaceBaseUrl ? replaceBaseUrl(USER_INFO_URL) : USER_INFO_URL
       })
       : null;
 
@@ -44,7 +45,7 @@ export class Profile extends Component<IProfileProps, IProfileState> {
         const userPicture = actions
           ? await actions.getProfileInfo({
             selectedVerb: 'GET',
-            sampleUrl: USER_PICTURE_URL
+            sampleUrl: shouldReplaceBaseUrl ? replaceBaseUrl(USER_PICTURE_URL) : USER_PICTURE_URL
           })
           : null;
 
@@ -190,7 +191,7 @@ function mapDispatchToProps(dispatch: Dispatch): object {
   };
 }
 
-function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootState) {
+function mapStateToProps({ sidebarProperties, theme, graphExplorerMode, cloud }: IRootState) {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
 
@@ -198,7 +199,8 @@ function mapStateToProps({ sidebarProperties, theme, graphExplorerMode }: IRootS
     mobileScreen: !!sidebarProperties.mobileScreen,
     appTheme: theme,
     minimised: !mobileScreen && !showSidebar,
-    graphExplorerMode
+    graphExplorerMode,
+    cloud
   };
 }
 

@@ -2,10 +2,11 @@ import { combineReducers } from 'redux';
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { autoComplete } from './autocomplete-reducer';
+import { cloud } from './cloud-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
-import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { graphExplorerMode } from './graph-explorer-mode-reducer';
+import { permissionsPanelOpen } from './permissions-panel-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { sampleQuery } from './query-input-reducers';
@@ -24,6 +25,7 @@ export default combineReducers({
   adaptiveCard,
   authToken,
   autoComplete,
+  cloud,
   consentedScopes,
   graphExplorerMode,
   graphResponse,

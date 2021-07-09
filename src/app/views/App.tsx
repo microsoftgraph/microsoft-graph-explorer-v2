@@ -1,6 +1,6 @@
 import {
-  Announced,
-  IStackTokens, ITheme, styled
+  Announced, IStackTokens,
+  ITheme, styled
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -9,6 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { geLocale } from '../../appLocale';
 import { authenticationWrapper } from '../../modules/authentication';
+import { getCurrentCloud, getEligibleCloud } from '../../modules/sovereign-clouds';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
@@ -40,6 +41,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Settings } from './settings';
+import { SovereignClouds } from './settings/SovereignClouds';
 import { Sidebar } from './sidebar/Sidebar';
 
 interface IAppProps {
@@ -68,6 +70,7 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  showCloudDialog: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -78,6 +81,7 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
+      showCloudDialog: false,
       hideDialog: true
     };
   }
@@ -118,7 +122,24 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
+    this.toggleConfirmCloud();
   };
+
+  public toggleConfirmCloud = () => {
+    if (this.state.showCloudDialog) {
+      this.setState({
+        showCloudDialog: false
+      })
+    } else {
+      const currentCloud = getCurrentCloud();
+      const eligibleCloud = getEligibleCloud();
+      if (!currentCloud && eligibleCloud) {
+        this.setState({
+          showCloudDialog: true,
+        })
+      }
+    }
+  }
 
   public handleSharedQueries() {
     const { actions } = this.props;
@@ -302,6 +323,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public render() {
+    const { showCloudDialog } = this.state;
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
       actions, sidebarProperties, intl: { messages } }: any = this.props;
@@ -386,6 +408,11 @@ class App extends Component<IAppProps, IAppState> {
             </div>
           </div>
         </div>
+        <SovereignClouds
+          prompt={true}
+          cloudSelectorOpen={showCloudDialog}
+          toggleCloudSelector={this.toggleConfirmCloud}
+        />
       </ThemeContext.Provider>
     );
   }

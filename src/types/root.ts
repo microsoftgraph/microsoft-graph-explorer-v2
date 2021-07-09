@@ -1,3 +1,4 @@
+import { ICloud } from './cloud';
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
@@ -14,26 +15,27 @@ import { ISnippet } from './snippets';
 import { IStatus } from './status';
 
 export interface IRootState {
-  theme: string;
   adaptiveCard: IAdaptiveCardResponse;
+  authToken: IAuthenticateResult;
+  autoComplete: IAutocompleteResponse;
+  cloud: ICloud;
+  consentedScopes: string[];
+  dimensions: IDimensions;
   graphExplorerMode: Mode;
+  graphResponse: IGraphResponse;
+  history: IHistoryItem[];
+  isLoadingData: boolean;
+  permissionsPanelOpen: boolean;
   profile: IUser | undefined | null;
   queryRunnerStatus: IStatus | null;
-  sampleQuery: IQuery;
-  termsOfUse: boolean;
-  sidebarProperties: ISidebarProps;
-  authToken: IAuthenticateResult;
-  samples: ISampleQuery[];
-  consentedScopes: string[];
-  scopes: IScopes;
-  history: IHistoryItem[];
-  graphResponse: IGraphResponse;
-  permissionsPanelOpen: boolean;
-  isLoadingData: boolean;
-  snippets: ISnippet;
   responseAreaExpanded: boolean;
-  dimensions: IDimensions;
-  autoComplete: IAutocompleteResponse;
+  sampleQuery: IQuery;
+  samples: ISampleQuery[];
+  scopes: IScopes;
+  sidebarProperties: ISidebarProps;
+  snippets: ISnippet;
+  termsOfUse: boolean;
+  theme: string;
   devxApi: IDevxAPI;
 }
 

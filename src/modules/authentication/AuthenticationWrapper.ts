@@ -4,7 +4,8 @@ import {
   PopupRequest, SilentRequest
 } from '@azure/msal-browser';
 
-import { AUTH_URL, DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { DEFAULT_USER_SCOPES, HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
+import { getCurrentCloud, globalCloud } from '../sovereign-clouds';
 import { geLocale } from '../../appLocale';
 import { getCurrentUri } from './authUtils';
 import IAuthenticationWrapper from './IAuthenticationWrapper';
@@ -44,7 +45,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   public logOut() {
     this.deleteHomeAccountId();
-    msalApplication.logout();
+    msalApplication.logout({
+      authority: this.getAuthority()
+    });
   }
 
   public async logOutPopUp() {
@@ -125,11 +128,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     const urlParams = new URLSearchParams(location.search);
     let tenant = urlParams.get('tenant');
 
+    const currentCloud = getCurrentCloud();
+    const { loginUrl } = (currentCloud) ? currentCloud : globalCloud;
+
     if (!tenant) {
       tenant = 'common';
     }
 
-    return `${AUTH_URL}/${tenant}/`;
+    return `${loginUrl}/${tenant}/`;
   }
 
   private async loginWithInteraction(userScopes: string[], sessionId?: string) {
@@ -181,7 +187,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    * and uses either the homeAccountId 'login' to get localstorage keys that contain this
    * identifier
    */
-  private clearCache(): void {
+  public clearCache(): void {
     const keyFilter = this.getHomeAccountId() || 'login';
     const msalKeys = Object.keys(localStorage).filter(key => key.includes(keyFilter));
     msalKeys.forEach((item: string) => {

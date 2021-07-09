@@ -6,4 +6,5 @@ export default interface IAuthenticationWrapper {
   logOut(): void;
   logOutPopUp(): void;
   consentToScopes(scopes: string[]): Promise<AuthenticationResult>;
+  clearCache(): void;
 }

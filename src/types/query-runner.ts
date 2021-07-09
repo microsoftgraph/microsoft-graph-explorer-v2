@@ -1,4 +1,5 @@
 import { ITheme } from '@uifabric/styling';
+import { ICloud } from './cloud';
 import { Mode } from './enums';
 
 export interface IQueryRunnerState {
@@ -87,6 +88,7 @@ export interface ISampleQueriesProps {
   styles?: object;
   tokenPresent: boolean;
   profile: object;
+  cloud: ICloud;
   samples: {
     pending: boolean;
     queries: ISampleQuery[];

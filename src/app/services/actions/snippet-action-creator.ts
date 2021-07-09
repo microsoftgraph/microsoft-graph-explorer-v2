@@ -1,11 +1,7 @@
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import {
-  GET_SNIPPET_ERROR,
-  GET_SNIPPET_PENDING,
-  GET_SNIPPET_SUCCESS,
-} from '../redux-constants';
+import { GET_SNIPPET_ERROR, GET_SNIPPET_PENDING, GET_SNIPPET_SUCCESS } from '../redux-constants';
 
 export function getSnippetSuccess(response: string): IAction {
   return {

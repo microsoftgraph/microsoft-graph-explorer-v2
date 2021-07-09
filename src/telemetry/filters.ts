@@ -7,10 +7,8 @@ import {
   HOME_ACCOUNT_KEY,
   ADAPTIVE_CARD_URL,
 } from '../app/services/graph-constants';
-import {
-  sanitizeGraphAPISandboxUrl,
-  sanitizeQueryUrl,
-} from '../app/utils/query-url-sanitization';
+import { sanitizeGraphAPISandboxUrl, sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
+import { clouds } from '../modules/sovereign-clouds';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
   const baseType = envelope.baseType || '';
@@ -27,30 +25,42 @@ export function filterTelemetryTypes(envelope: ITelemetryItem) {
 export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
   if (envelope.baseType === 'RemoteDependencyData') {
     const baseData = envelope.baseData || {};
-    const urlObject = new URL(baseData.target || '');
-
     const targetsToInclude = [
       GRAPH_URL,
       DEVX_API_URL,
       new URL(GRAPH_API_SANDBOX_URL).origin,
       new URL(ADAPTIVE_CARD_URL).origin,
-    ];
-    if (!targetsToInclude.includes(urlObject.origin)) {
+    ].concat(getCloudUrls());
+
+    const { origin } = new URL(baseData.target || '');
+    if (!targetsToInclude.includes(origin)) {
       return false;
     }
 
     const target = baseData.target || '';
-    switch (urlObject.origin) {
+    switch (origin) {
       case GRAPH_URL:
         baseData.name = sanitizeQueryUrl(target);
         break;
       case GRAPH_API_SANDBOX_URL:
         baseData.name = sanitizeGraphAPISandboxUrl(target);
       default:
+        if (getCloudUrls().includes(origin)) {
+          baseData.name = sanitizeQueryUrl(target);
+        }
         break;
     }
+    return true;
   }
-  return true;
+  return false;
+}
+
+function getCloudUrls() {
+  const urls: string[] = [];
+  clouds.forEach(cloud => {
+    urls.push(cloud.baseUrl);
+  });
+  return urls;
 }
 
 export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {

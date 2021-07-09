@@ -75,4 +75,49 @@ describe('Sample Url Generation', () => {
     expect(parsedUrl).toEqual(expectedUrl);
   });
 
+  it('returns appropriate version number', () => {
+    const url = `https://graph.microsoft.com/v1.0/users`;
+    const expectedVersion = 'v1.0';
+    const parsedUrl = parseSampleUrl(url);
+    expect(parsedUrl.queryVersion).toEqual(expectedVersion);
+  });
+
+  it('destructures sample url with long version number', () => {
+    const url = `https://graph.microsoft.com/longversionnumberv2/me/messages`;
+
+    const expectedUrl = {
+      requestUrl: 'me/messages',
+      queryVersion: 'longversionnumberv2',
+      sampleUrl: url,
+      search: ''
+    };
+
+    const parsedUrl = parseSampleUrl(url);
+    expect(parsedUrl).toEqual(expectedUrl);
+  });
+
+  it('returns appropriate request url for long version number', () => {
+    const version = 'longversionnumberv2';
+    const requestUrl = 'me/messages';
+    const url = `https://graph.microsoft.com/${version}/${requestUrl}`;
+    const parsedUrl = parseSampleUrl(url);
+    expect(parsedUrl.requestUrl).toEqual(requestUrl);
+  });
+
+  it('replace version number with new one', () => {
+    const version = 'beta';
+    const requestUrl = 'me/messages';
+    const url = `https://graph.microsoft.com/v1.0/${requestUrl}`;
+
+    const expectedUrl = {
+      requestUrl,
+      queryVersion: version,
+      sampleUrl: `https://graph.microsoft.com/${version}/${requestUrl}`,
+      search: ''
+    };
+
+    const parsedUrl = parseSampleUrl(url, version);
+    expect(parsedUrl).toEqual(expectedUrl);
+  });
+
 });

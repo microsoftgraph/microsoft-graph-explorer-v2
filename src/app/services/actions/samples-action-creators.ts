@@ -1,11 +1,7 @@
 import { geLocale } from '../../../appLocale';
 import { IAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
-import {
-  SAMPLES_FETCH_ERROR,
-  SAMPLES_FETCH_PENDING,
-  SAMPLES_FETCH_SUCCESS,
-} from '../redux-constants';
+import { SAMPLES_FETCH_ERROR, SAMPLES_FETCH_PENDING, SAMPLES_FETCH_SUCCESS } from '../redux-constants';
 
 export function fetchSamplesSuccess(response: object): IAction {
   return {

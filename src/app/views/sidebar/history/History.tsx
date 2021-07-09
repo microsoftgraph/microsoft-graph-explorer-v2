@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
@@ -19,7 +20,6 @@ import * as queryActionCreators from '../../../services/actions/query-action-cre
 import * as queryInputActionCreators from '../../../services/actions/query-input-action-creators';
 import * as queryStatusActionCreators from '../../../services/actions/query-status-action-creator';
 import * as requestHistoryActionCreators from '../../../services/actions/request-history-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
@@ -144,6 +144,7 @@ export class History extends Component<IHistoryProps, any> {
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+      const { requestUrl, search, queryVersion } = parseSampleUrl(queryContent);
       let color = currentTheme.palette.green;
       if (item.status > 300) {
         color = currentTheme.palette.red;
@@ -224,7 +225,7 @@ export class History extends Component<IHistoryProps, any> {
                   aria-describedby={hostId}
                   className={classes.queryContent}
                 >
-                  {queryContent.replace(GRAPH_URL, '')}
+                  {`/${queryVersion}/${requestUrl + search}`}
                 </span>
               </TooltipHost>
             </>
@@ -362,7 +363,8 @@ export class History extends Component<IHistoryProps, any> {
 
   private onRunQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const queryUrl = replaceBaseUrl(query.url);
+    const { sampleUrl, queryVersion } = parseSampleUrl(queryUrl);
     const sampleQuery: IQuery = {
       sampleUrl,
       selectedVerb: query.method,
@@ -428,7 +430,8 @@ export class History extends Component<IHistoryProps, any> {
 
   private onViewQuery = (query: IHistoryItem) => {
     const { actions } = this.props;
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const queryUrl = replaceBaseUrl(query.url);
+    const { sampleUrl, queryVersion } = parseSampleUrl(queryUrl);
     const sampleQuery: IQuery = {
       sampleUrl,
       selectedVerb: query.method,

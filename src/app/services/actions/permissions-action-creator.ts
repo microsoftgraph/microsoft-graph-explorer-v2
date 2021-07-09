@@ -8,15 +8,8 @@ import { IRootState } from '../../../types/root';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
-import {
-  FETCH_SCOPES_ERROR,
-  FETCH_SCOPES_PENDING,
-  FETCH_SCOPES_SUCCESS,
-} from '../redux-constants';
-import {
-  getAuthTokenSuccess,
-  getConsentedScopesSuccess,
-} from './auth-action-creators';
+import { FETCH_SCOPES_ERROR, FETCH_SCOPES_PENDING, FETCH_SCOPES_SUCCESS } from '../redux-constants';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './auth-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 
 export function fetchScopesSuccess(response: object): IAction {

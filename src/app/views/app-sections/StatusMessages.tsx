@@ -1,6 +1,7 @@
 import { Link, MessageBar } from 'office-ui-fabric-react';
 import React, { Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { replaceBaseUrl } from '../../../modules/sovereign-clouds';
 
 import { IQuery } from '../../../types/query-runner';
 import { GRAPH_URL } from '../../services/graph-constants';
@@ -38,7 +39,7 @@ export function statusMessages(queryState: any, sampleQuery: IQuery, actions: an
 
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
-    query.sampleUrl = link;
+    query.sampleUrl = replaceBaseUrl(link);
     actions.setSampleQuery(query);
   };
 

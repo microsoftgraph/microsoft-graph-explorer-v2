@@ -1,12 +1,14 @@
 import { ITheme } from 'office-ui-fabric-react';
+import { ICloud } from './cloud';
 
 export interface IProfileProps {
     intl: {
-      message: object;
+        message: object;
     };
     theme?: ITheme;
     styles?: object;
     mobileScreen: boolean;
+    cloud: ICloud;
     actions?: {
         getProfileInfo: Function;
         signOut: Function;

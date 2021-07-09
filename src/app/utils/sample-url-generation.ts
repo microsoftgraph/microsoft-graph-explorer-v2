@@ -1,6 +1,11 @@
-import { GRAPH_URL } from '../services/graph-constants';
+interface IParsedSample {
+  queryVersion: string;
+  requestUrl: string;
+  sampleUrl: string;
+  search: string;
+}
 
-export function parseSampleUrl(url: string, version?: string) {
+export function parseSampleUrl(url: string, version?: string): IParsedSample {
   let requestUrl = '';
   let queryVersion = '';
   let sampleUrl = '';
@@ -8,11 +13,10 @@ export function parseSampleUrl(url: string, version?: string) {
 
   if (url !== '') {
     try {
-      const urlObject: URL = new URL(url);
-      requestUrl = decodeURIComponent(urlObject.pathname.substr(6).replace(/\/$/, ''));
-      queryVersion = (version) ? version : urlObject.pathname.substring(1, 5);
-      search = generateSearchParameters(urlObject, search);
-      sampleUrl = `${GRAPH_URL}/${queryVersion}/${requestUrl + search}`;
+      queryVersion = (version) ? version : getGraphVersion(url);
+      requestUrl = getRequestUrl(url, queryVersion);
+      search = generateSearchParameters(url, search);
+      sampleUrl = generateSampleUrl(url, queryVersion, requestUrl, search);
     } catch (error) {
       if (error.message === `Failed to construct 'URL': Invalid URL`) {
         return {
@@ -27,8 +31,21 @@ export function parseSampleUrl(url: string, version?: string) {
   };
 }
 
-function generateSearchParameters(urlObject: URL, search: string) {
-  const searchParameters = urlObject.search;
+function getRequestUrl(url: string, version: string): string {
+  const { pathname } = new URL(url);
+  const versionToReplace = (pathname.startsWith(`/${version}`)) ? version : getGraphVersion(url);
+  const requestContent = pathname.split(versionToReplace + '/').pop()!;
+  return decodeURIComponent(requestContent!.replace(/\/$/, ''));
+}
+
+function getGraphVersion(url: string): string {
+  const { pathname } = new URL(url);
+  const parts = pathname.substring(1).split('/');
+  return parts[0];
+}
+
+function generateSearchParameters(url: string, search: string) {
+  const { search: searchParameters } = new URL(url);
   if (searchParameters) {
     try {
       search = decodeURI(searchParameters);
@@ -42,3 +59,7 @@ function generateSearchParameters(urlObject: URL, search: string) {
   return search;
 }
 
+function generateSampleUrl(url: string, queryVersion: string, requestUrl: string, search: string): string {
+  const { origin } = new URL(url);
+  return `${origin}/${queryVersion}/${requestUrl + search}`;
+}

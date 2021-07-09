@@ -19,6 +19,7 @@ import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
 import { addHistoryItem } from './app/services/actions/request-history-action-creators';
 import { changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { getCurrentCloud, globalCloud } from './modules/sovereign-clouds';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
 import { readHistoryData } from './app/views/sidebar/history/history-utils';
@@ -52,6 +53,9 @@ initializeIcons();
 const currentTheme = readTheme();
 loadGETheme(currentTheme);
 
+const currentCloud = getCurrentCloud() || null;
+const { baseUrl } = (currentCloud) ? currentCloud : globalCloud;
+
 const appState: any = store({
   authToken: { token: false, pending: false },
   consentedScopes: [],
@@ -59,7 +63,7 @@ const appState: any = store({
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
-    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+    sampleUrl: `${baseUrl}/v1.0/me`,
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: [],
@@ -67,7 +71,6 @@ const appState: any = store({
   },
   termsOfUse: true,
   theme: currentTheme,
-
 });
 
 function refreshAccessToken() {
