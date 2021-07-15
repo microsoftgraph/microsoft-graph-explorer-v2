@@ -83,6 +83,10 @@ export function getTokens(user?: any) {
       demoTenantValue: '19:d0bba23c2fc8413991125a43a54cc30e@thread.skype',
     },
     {
+      placeholder: 'chat-id',
+      demoTenantValue: '19:2a395c1dfe36431fb6e4cd5b225c17ee@thread.v2',
+    },
+    {
       placeholder: 'message-id',
       demoTenantValue: '1501527481624',
     },
@@ -101,6 +105,10 @@ export function getTokens(user?: any) {
     {
       placeholder: 'user-id',
       demoTenantValue: 'd4957c9d-869e-4364-830c-d0c95be72738',
+    },
+    {
+      placeholder: 'membership-id',
+      demoTenantValue: 'MCMjMCMjZGNkMjE5ZGQtYmM2OC00YjliLWJmMGItNGEzM2E3OTZiZTM1IyMxOToyYTM5NWMxZGZlMzY0MzFmYjZlNGNkNWIyMjVjMTdlZUB0aHJlYWQudjIjIzQ4ZDMxODg3LTVmYWQtNGQ3My1hOWY1LTNjMzU2ZTY4YTAzOA==',
     },
     {
       placeholder: 'today',
