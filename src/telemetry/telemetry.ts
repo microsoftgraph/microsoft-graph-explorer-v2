@@ -4,6 +4,7 @@ import {
 } from '@microsoft/applicationinsights-react-js';
 import {
   ApplicationInsights,
+  DistributedTracingModes,
   SeverityLevel,
 } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
@@ -42,6 +43,8 @@ class Telemetry implements ITelemetry {
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
       disableTelemetry: this.getInstrumentationKey() ? false : true,
       extensions: [this.reactPlugin],
+      enableCorsCorrelation: true,
+      distributedTracingMode: DistributedTracingModes.AI_AND_W3C,
     };
 
     this.appInsights = new ApplicationInsights({
