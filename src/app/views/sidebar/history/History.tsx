@@ -518,20 +518,26 @@ export class History extends Component<IHistoryProps, any> {
           <Announced
             message={`${items.length} search results available.`}
           />
-          {items.length > 0 && <DetailsList
-            className={classes.queryList}
-            onRenderItemColumn={this.renderItemColumn}
-            items={items}
-            columns={columns}
-            selectionMode={SelectionMode.none}
-            groups={groups}
-            groupProps={{
-              showEmptyGroups: true,
-              onRenderHeader: this.renderGroupHeader,
-            }}
-            onRenderRow={this.renderRow}
-            onRenderDetailsHeader={this.renderDetailsHeader}
-          />}
+          {items.length > 0 &&
+            <div
+              onMouseEnter={() => this.setState({ isHoverOverHistoryList: true })}
+              onMouseLeave={() => this.setState({ isHoverOverHistoryList: false })}>
+              <DetailsList
+                styles={this.state.isHoverOverHistoryList ? { root: { overflow: 'scroll' } } : { root: { overflow: 'hidden' } }}
+                className={classes.queryList}
+                onRenderItemColumn={this.renderItemColumn}
+                items={items}
+                columns={columns}
+                selectionMode={SelectionMode.none}
+                groups={groups}
+                groupProps={{
+                  showEmptyGroups: true,
+                  onRenderHeader: this.renderGroupHeader,
+                }}
+                onRenderRow={this.renderRow}
+                onRenderDetailsHeader={this.renderDetailsHeader}
+              />
+            </div>}
         </div>
         <Dialog
           hidden={hideDialog}

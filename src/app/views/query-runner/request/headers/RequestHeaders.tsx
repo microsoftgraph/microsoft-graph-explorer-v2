@@ -21,6 +21,7 @@ const RequestHeaders = (props: any) => {
   const [headerName, setHeaderName] = useState('');
   const [headerValue, setHeaderValue] = useState('');
   const [announcedMessage, setAnnouncedMessage] = useState('');
+  const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
 
   const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
@@ -76,7 +77,11 @@ const RequestHeaders = (props: any) => {
   };
 
   return (
-    <div className={classes.container} style={{ height: convertVhToPx(height, 60) }}>
+    <div
+      onMouseEnter={() => setIsHoverOverHeadersList(true)}
+      onMouseLeave={() => setIsHoverOverHeadersList(false)}
+      className={classes.container}
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } : { height: convertVhToPx(height, 60), overflow: "hidden" }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>

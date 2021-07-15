@@ -1,5 +1,5 @@
 import { DetailsList, DetailsListLayoutMode, IColumn, Label, Link, SelectionMode } from 'office-ui-fabric-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,6 +21,7 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
   const { consentedScopes, scopes, authToken } = useSelector((state: IRootState) => state);
   const permissions: IPermission[] = scopes.hasUrl ? scopes.data : [];
   const tokenPresent = !!authToken.token;
+  const [isHoverOverPermissionsList, setIsHoverOverPermissionsList] = useState(false);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -63,13 +64,18 @@ const TabList = ({ columns, classes, renderItemColumn, renderDetailsHeader, maxH
         {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
         {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
       </Label>
-      <DetailsList styles={{ root: { maxHeight } }}
-        items={permissions}
-        columns={columns}
-        onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
-        selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+      <div
+        onMouseEnter={() => setIsHoverOverPermissionsList(true)}
+        onMouseLeave={() => setIsHoverOverPermissionsList(false)}>
+        <DetailsList
+          styles={isHoverOverPermissionsList ? { root: { maxHeight } } : { root: { maxHeight, overflow: "hidden" } }}
+          items={permissions}
+          columns={columns}
+          onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => renderItemColumn(item, index, column)}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsHeader={(props?: any, defaultRender?: any) => renderDetailsHeader(props, defaultRender)} />
+      </div>
       {permissions && permissions.length === 0 &&
         displayNoPermissionsFoundMessage()
       }
