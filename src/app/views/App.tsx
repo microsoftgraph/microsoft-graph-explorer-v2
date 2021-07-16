@@ -1,6 +1,8 @@
 import {
   Announced,
-  IStackTokens, ITheme, styled
+  IStackTokens,
+  ITheme,
+  styled,
 } from 'office-ui-fabric-react';
 import React, { Component } from 'react';
 import { InjectedIntl, injectIntl } from 'react-intl';
@@ -13,7 +15,11 @@ import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
-import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
+import {
+  IInitMessage,
+  IQuery,
+  IThemeChangedMessage,
+} from '../../types/query-runner';
 import { IRootState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
@@ -22,13 +28,16 @@ import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../services/actions/query-status-action-creator';
 import { clearTermsOfUse } from '../services/actions/terms-of-use-action-creator';
-import { changeThemeSuccess } from '../services/actions/theme-action-creator';
+import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
-import { appTitleDisplayOnFullScreen, appTitleDisplayOnMobileScreen } from './app-sections/AppTitle';
+import {
+  appTitleDisplayOnFullScreen,
+  appTitleDisplayOnMobileScreen,
+} from './app-sections/AppTitle';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { statusMessages } from './app-sections/StatusMessages';
 import { termsOfUseMessage } from './app-sections/TermsOfUseMessage';
@@ -61,6 +70,7 @@ interface IAppProps {
     toggleSidebar: Function;
     signIn: Function;
     storeScopes: Function;
+    changeTheme: Function;
   };
 }
 
@@ -78,7 +88,7 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
-      hideDialog: true
+      hideDialog: true,
     };
   }
 
@@ -103,7 +113,7 @@ class App extends Component<IAppProps, IAppState> {
       'https://docs.microsoft.com',
       'https://review.docs.microsoft.com',
       'https://ppe.docs.microsoft.com',
-      'https://docs.azure.cn'
+      'https://docs.azure.cn',
     ];
 
     // Notify host document that GE is ready to receive messages
@@ -147,7 +157,8 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
+    const { request, method, version, graphUrl, requestBody, headers } =
+      queryParams;
 
     if (!request) {
       return null;
@@ -158,7 +169,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: requestBody ? this.hashDecode(requestBody) : null,
-      sampleHeaders: (headers) ? JSON.parse(this.hashDecode(headers)) : [],
+      sampleHeaders: headers ? JSON.parse(this.hashDecode(headers)) : [],
     };
   }
 
@@ -214,7 +225,7 @@ class App extends Component<IAppProps, IAppState> {
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
-        selectedVerb: verb
+        selectedVerb: verb,
       });
     }
 
@@ -232,7 +243,7 @@ class App extends Component<IAppProps, IAppState> {
         const requestHeaders = headers.map((header: any) => {
           return {
             name: Object.keys(header)[0],
-            value: Object.values(header)[0]
+            value: Object.values(header)[0],
           };
         });
 
@@ -241,7 +252,7 @@ class App extends Component<IAppProps, IAppState> {
           selectedVerb: verb,
           sampleBody: body,
           selectedVersion: queryVersion,
-          sampleHeaders: requestHeaders
+          sampleHeaders: requestHeaders,
         };
 
         substituteTokens(query, profile);
@@ -249,12 +260,11 @@ class App extends Component<IAppProps, IAppState> {
         actions.setSampleQuery(query);
       }
     }, 1000);
-
   };
 
   public handleSelectVerb = (verb: string) => {
     this.setState({
-      selectedVerb: verb
+      selectedVerb: verb,
     });
   };
 
@@ -263,12 +273,10 @@ class App extends Component<IAppProps, IAppState> {
     const properties = { ...sidebarProperties };
     properties.showSidebar = !properties.showSidebar;
     this.props.actions!.toggleSidebar(properties);
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
-      });
-  }
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON,
+    });
+  };
 
   public displayToggleButton = (mediaQueryList: any) => {
     const mobileScreen = mediaQueryList.matches;
@@ -279,32 +287,45 @@ class App extends Component<IAppProps, IAppState> {
 
     const properties = {
       mobileScreen,
-      showSidebar
+      showSidebar,
     };
 
     this.props.actions!.toggleSidebar(properties);
-  }
+  };
 
   public displayAuthenticationSection = (minimised: boolean) => {
-    return <div style={{
-      display: minimised ? 'block' : 'flex',
-      justifyContent: minimised ? '' : 'center',
-      alignItems: minimised ? '' : 'center',
-      marginLeft: minimised ? '' : '-0.9em',
-    }}>
-      <div className={minimised ? '' : 'col-10'}>
-        <Authentication />
+    return (
+      <div
+        style={{
+          display: minimised ? 'block' : 'flex',
+          justifyContent: minimised ? '' : 'center',
+          alignItems: minimised ? '' : 'center',
+          marginLeft: minimised ? '' : '-0.9em',
+        }}
+      >
+        <div className={minimised ? '' : 'col-10'}>
+          <Authentication />
+        </div>
+        <div className={minimised ? '' : 'col-2'}>
+          <Settings />
+        </div>
       </div>
-      <div className={minimised ? '' : 'col-2'}>
-        <Settings />
-      </div>
-    </div>;
-  }
+    );
+  };
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, queryState, minimised, termsOfUse, sampleQuery,
-      actions, sidebarProperties, intl: { messages } }: any = this.props;
+    const {
+      authenticated,
+      graphExplorerMode,
+      queryState,
+      minimised,
+      termsOfUse,
+      sampleQuery,
+      actions,
+      sidebarProperties,
+      intl: { messages },
+    }: any = this.props;
     const query = createShareLink(sampleQuery, authenticated);
     const sampleHeaderText = messages['Sample Queries'];
     // tslint:disable-next-line:no-string-literal
@@ -320,7 +341,7 @@ class App extends Component<IAppProps, IAppState> {
 
     const stackTokens: IStackTokens = {
       childrenGap: 10,
-      padding: 10
+      padding: 10,
     };
 
     let sidebarWidth = `col-sm-12 col-lg-3 col-md-4 ${classes.sidebar}`;
@@ -343,46 +364,62 @@ class App extends Component<IAppProps, IAppState> {
       // @ts-ignore
       <ThemeContext.Provider value={this.props.appTheme}>
         <div className={`container-fluid ${classes.app}`}>
-          <Announced message={!showSidebar ?
-            translateMessage('Sidebar minimized') : translateMessage('Sidebar maximized')} />
+          <Announced
+            message={
+              !showSidebar
+                ? translateMessage('Sidebar minimized')
+                : translateMessage('Sidebar maximized')
+            }
+          />
           <div className='row'>
             {graphExplorerMode === Mode.Complete && (
               <div className={sidebarWidth}>
-                {mobileScreen && appTitleDisplayOnMobileScreen(
-                  stackTokens,
-                  classes,
-                  this.toggleSidebar)}
+                {mobileScreen &&
+                  appTitleDisplayOnMobileScreen(
+                    stackTokens,
+                    classes,
+                    this.toggleSidebar
+                  )}
 
-                {!mobileScreen && appTitleDisplayOnFullScreen(
-                  classes,
-                  minimised,
-                  this.toggleSidebar
-                )}
+                {!mobileScreen &&
+                  appTitleDisplayOnFullScreen(
+                    classes,
+                    minimised,
+                    this.toggleSidebar
+                  )}
 
                 <hr className={classes.separator} />
 
                 {this.displayAuthenticationSection(minimised)}
                 <hr className={classes.separator} />
 
-                {showSidebar && <>
-                  <Sidebar sampleHeaderText={sampleHeaderText} historyHeaderText={historyHeaderText} />
-                </>}
+                {showSidebar && (
+                  <>
+                    <Sidebar
+                      sampleHeaderText={sampleHeaderText}
+                      historyHeaderText={historyHeaderText}
+                    />
+                  </>
+                )}
               </div>
             )}
             <div className={layout}>
-              {graphExplorerMode === Mode.TryIt && headerMessaging(classes, query)}
+              {graphExplorerMode === Mode.TryIt &&
+                headerMessaging(classes, query)}
 
-              {displayContent && <>
-                <div style={{ marginBottom: 8 }}>
-                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                </div>
-                {statusMessages(queryState, sampleQuery, actions)}
-                {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
-                {
-                  // @ts-ignore
-                  <QueryResponse verb={this.state.selectedVerb} />
-                }
-              </>}
+              {displayContent && (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  </div>
+                  {statusMessages(queryState, sampleQuery, actions)}
+                  {termsOfUseMessage(termsOfUse, actions, classes, geLocale)}
+                  {
+                    // @ts-ignore
+                    <QueryResponse verb={this.state.selectedVerb} />
+                  }
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -391,8 +428,15 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = ({ sidebarProperties, theme,
-  queryRunnerStatus, profile, sampleQuery, termsOfUse, authToken, graphExplorerMode
+const mapStateToProps = ({
+  sidebarProperties,
+  theme,
+  queryRunnerStatus,
+  profile,
+  sampleQuery,
+  termsOfUse,
+  authToken,
+  graphExplorerMode,
 }: IRootState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -407,23 +451,24 @@ const mapStateToProps = ({ sidebarProperties, theme,
     termsOfUse,
     minimised: !mobileScreen && !showSidebar,
     sampleQuery,
-    authenticated: !!authToken.token
+    authenticated: !!authToken.token,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    actions: bindActionCreators({
-      clearQueryStatus,
-      clearTermsOfUse,
-      runQuery,
-      setSampleQuery,
-      toggleSidebar,
-      ...authActionCreators,
-      changeTheme: (newTheme: string) => {
-        return (disp: Function) => disp(changeThemeSuccess(newTheme));
-      }
-    }, dispatch)
+    actions: bindActionCreators(
+      {
+        clearQueryStatus,
+        clearTermsOfUse,
+        runQuery,
+        setSampleQuery,
+        toggleSidebar,
+        ...authActionCreators,
+        changeTheme,
+      },
+      dispatch
+    ),
   };
 };
 

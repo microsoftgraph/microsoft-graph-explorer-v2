@@ -2,7 +2,6 @@ import { Dispatch } from 'redux';
 
 import { saveTheme } from '../../../themes/theme-utils';
 import { IAction } from '../../../types/action';
-import { IThemeChangedMessage } from '../../../types/query-runner';
 import { CHANGE_THEME_SUCCESS } from '../redux-constants';
 
 export function changeThemeSuccess(response: string): IAction {
@@ -12,8 +11,7 @@ export function changeThemeSuccess(response: string): IAction {
   };
 }
 
-export function changeTheme(theme: IThemeChangedMessage['theme']): Function {
-
+export function changeTheme(theme: string): Function {
   saveTheme(theme);
 
   return (dispatch: Dispatch) => {
