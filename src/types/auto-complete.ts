@@ -26,6 +26,7 @@ export interface IAutoCompleteState {
   userInput: string;
   compare: string;
   queryUrl: string;
+  multiline: boolean;
 }
 
 export interface ISuggestionsList {

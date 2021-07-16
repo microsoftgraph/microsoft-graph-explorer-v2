@@ -44,7 +44,7 @@ export const autoCompleteStyles = (theme: ITheme) => {
       borderWidth: '1px',
       borderStyle: 'solid',
       borderColor: theme.palette.neutralLight,
-      overflow: 'hidden',
+      overflow: 'hidden'
     },
     suggestionActive: {
       display: 'block',
@@ -61,6 +61,7 @@ export const autoCompleteStyles = (theme: ITheme) => {
       borderWidth: '1px',
       borderStyle: 'solid',
       overflow: 'hidden',
+      wordWrap: "normal",
       backgroundColor: theme.palette.neutralLight
     },
     suggestionTitle: {
